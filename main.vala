@@ -4,17 +4,17 @@ static int main (string[] args) {
     var loop = new MainLoop();
 
     if(args.length < 2){
-        stderr.printf("Usage: %s <file to listen>\n", args[0]);
+        stderr.printf("Usage: %s <dir to listen>\n", args[0]);
         return 1;
     }
 
-    var file = File.new_for_path(args[1]);
+    var dir = File.new_for_path(args[1]);
 
-    FileMonitor monitor = file.monitor(GLib.FileMonitorFlags.NONE, null);
-    stdout.printf("Monitoring: %s\n", file.get_path());
+    FileMonitor monitor = dir.monitor(GLib.FileMonitorFlags.NONE, null);
+    stdout.printf("Monitoring directory : %s\n", dir.get_path());
     stdout.flush();
     monitor.changed.connect ((src, dest, event) => {
-        if (event == GLib.FileMonitorEvent.CHANGED) {
+        if (event == GLib.FileMonitorEvent.CREATED || event == GLib.FileMonitorEvent.CHANGED) {
             var created_at = read_created_at(src.get_path());
             if (created_at != null) {
                 double delta = compute_delta(created_at);

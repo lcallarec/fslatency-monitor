@@ -51,7 +51,6 @@ double? read_created_at(string filename) {
 
         return created_msts;
     }
-
     return null;
 }
 
